@@ -10,9 +10,9 @@ function Register() {
     e.preventDefault();
     try {
       await registerUser({ username, password });
-      alert('Registration successful');
+      alert('注册成功');
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error('注册失败', error);
     }
   };
 
