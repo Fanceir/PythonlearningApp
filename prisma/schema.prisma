@@ -1,5 +1,3 @@
-// prisma/schema.prisma
-
 generator client {
   provider = "prisma-client-py"
 }
@@ -10,8 +8,10 @@ datasource db {
 }
 
 model User {
-  id               Int      @id @default(autoincrement())
-  username         String   @unique
+  id               Int          @id @default(autoincrement())
+  username         String       @unique
+  email            String       @unique // 再次添加 @unique
+  fullName         String
   hashed_password  String
   codes            CodeSnippet[]
 }
