@@ -1,14 +1,22 @@
-// App.js
+// routes.js
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import AppRoutes from './routes';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Main from './pages/Main';
+import Profile from './pages/Profile'; // 添加个人主页页面
 
-function App() {
+function AppRoutes() {
   return (
-    <Router>
-      <AppRoutes />
-    </Router>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/main" element={<Main />} />
+      <Route path="/profile" element={<Profile />} /> {/* 个人主页 */}
+    </Routes>
   );
 }
 
-export default App;
+export default AppRoutes;

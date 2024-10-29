@@ -1,16 +1,17 @@
 // pages/Home.js
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 导入 useNavigate 钩子
+import { useNavigate } from 'react-router-dom';
 import { executeCode } from '../services/api';
-import { TextField, Button, Typography, Box } from '@mui/material';
-import TopBar from '../components/TopBar';
+import { Button, Typography, Box } from '@mui/material';
+import TopBarHome from '../components/TopBarHome';
+import Editor from '@monaco-editor/react';
 
 function Home() {
   const [code, setCode] = useState('print("Hello, Python!")');
   const [output, setOutput] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const navigate = useNavigate(); // 初始化导航
+  const navigate = useNavigate();
 
   const handleExecute = async () => {
     try {
@@ -22,11 +23,11 @@ function Home() {
   };
 
   const handleLoginClick = () => {
-    navigate('/login'); // 跳转到登录页面
+    navigate('/login');
   };
 
   const handleRegisterClick = () => {
-    navigate('/register'); // 跳转到注册页面
+    navigate('/register');
   };
 
   const handleLogoutClick = () => {
@@ -36,7 +37,7 @@ function Home() {
 
   return (
     <Box sx={{ padding: 4 }}>
-      <TopBar
+      <TopBarHome
         isLoggedIn={isLoggedIn}
         onLoginClick={handleLoginClick}
         onRegisterClick={handleRegisterClick}
@@ -45,25 +46,30 @@ function Home() {
 
       <Box sx={{ mt: 4 }}>
         <Typography variant="h3" gutterBottom align="center">
-          Welcome to Python Learning Platform
+          欢迎来到 Python 学习平台
         </Typography>
 
-        <TextField
-          label="Python Code"
-          multiline
-          fullWidth
-          rows={10}
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          variant="outlined"
-          sx={{ mt: 2 }}
-        />
+        <Box sx={{ border: '1px solid #ddd', borderRadius: '5px', mt: 2 }}>
+          <Editor
+            height="300px"
+            defaultLanguage="python"
+            defaultValue={code}
+            onChange={(value) => setCode(value || '')}
+            theme="vs-dark"
+            options={{
+              fontSize: 14,
+              minimap: { enabled: false },
+              lineNumbers: 'on',
+            }}
+          />
+        </Box>
 
         <Button
           variant="contained"
           color="primary"
           onClick={handleExecute}
           sx={{ mt: 2 }}
+          fullWidth
         >
           Run Code
         </Button>
