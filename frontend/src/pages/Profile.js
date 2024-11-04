@@ -1,22 +1,36 @@
-// pages/Profile.js
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
+import { fetchUserProfile, updateUserProfile } from '../services/api';
 
 function Profile() {
   const [userInfo, setUserInfo] = useState({
-    username: '',
+    fullName: '',
     email: '',
-    bio: '',
+    username: '',
+    currentPassword: '',
+    newPassword: '',
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // 模拟获取用户信息，可以替换为实际的 API 请求
-    const storedUser = {
-      username: 'JohnDoe',
-      email: 'john@example.com',
-      bio: 'Python enthusiast and lifelong learner.',
+    const loadProfile = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchUserProfile();
+        setUserInfo((prev) => ({
+          ...prev,
+          fullName: response.data.fullName,
+          email: response.data.email,
+          username: response.data.username,
+        }));
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      } finally {
+        setLoading(false);
+      }
     };
-    setUserInfo(storedUser);
+
+    loadProfile();
   }, []);
 
   const handleChange = (e) => {
@@ -24,10 +38,36 @@ function Profile() {
     setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSave = () => {
-    // 模拟保存用户信息，可以替换为实际的 API 请求
-    alert('Profile updated successfully!');
-    console.log(userInfo);
+  const handleSave = async () => {
+    try {
+      setLoading(true);
+
+      const profileData = {
+        fullName: userInfo.fullName,
+        email: userInfo.email,
+      };
+
+      // Only include password fields if they're provided
+      if (userInfo.currentPassword && userInfo.newPassword) {
+        profileData.current_password = userInfo.currentPassword;
+        profileData.new_password = userInfo.newPassword;
+      }
+
+      await updateUserProfile(profileData);
+      alert('Profile updated successfully!');
+
+      // Clear password fields after update
+      setUserInfo((prev) => ({
+        ...prev,
+        currentPassword: '',
+        newPassword: '',
+      }));
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -43,8 +83,8 @@ function Profile() {
           label="Username"
           name="username"
           value={userInfo.username}
-          onChange={handleChange}
           fullWidth
+          disabled
         />
         <TextField
           label="Email"
@@ -54,16 +94,35 @@ function Profile() {
           fullWidth
         />
         <TextField
-          label="Bio"
-          name="bio"
-          value={userInfo.bio}
+          label="Full Name"
+          name="fullName"
+          value={userInfo.fullName}
           onChange={handleChange}
           fullWidth
-          multiline
-          rows={4}
         />
-        <Button variant="contained" color="primary" onClick={handleSave}>
-          Save Changes
+        <TextField
+          label="Current Password"
+          name="currentPassword"
+          type="password"
+          value={userInfo.currentPassword}
+          onChange={handleChange}
+          fullWidth
+        />
+        <TextField
+          label="New Password"
+          name="newPassword"
+          type="password"
+          value={userInfo.newPassword}
+          onChange={handleChange}
+          fullWidth
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSave}
+          disabled={loading}
+        >
+          {loading ? 'Saving...' : 'Save Changes'}
         </Button>
       </Box>
     </Container>

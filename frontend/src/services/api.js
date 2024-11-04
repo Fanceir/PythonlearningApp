@@ -1,9 +1,8 @@
-// services/api.js
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8000';
 
-// 创建 axios 实例
+// Create axios instance
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -11,7 +10,7 @@ const api = axios.create({
   },
 });
 
-// 请求拦截器：自动添加 Authorization 头
+// Request Interceptor: Automatically add Authorization header
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -23,7 +22,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// 响应拦截器：处理错误
+// Response Interceptor: Handle errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -33,7 +32,17 @@ api.interceptors.response.use(
   }
 );
 
+// Auth API
 export const registerUser = (userData) => api.post('/auth/register', userData);
 export const loginUser = ({ username, password }) =>
   api.post('/auth/login', { username, password });
+
+// Profile API
+export const fetchUserProfile = () => api.get('/auth/me'); // Updated endpoint to /auth/me
+export const updateUserProfile = (profileData) =>
+  api.put('/auth/me', profileData); // Updated endpoint to /auth/me
+
+// Code Execution API
 export const executeCode = (codeData) => api.post('/code/execute', codeData);
+
+export default api;

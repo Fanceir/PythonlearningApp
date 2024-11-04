@@ -11,7 +11,6 @@ class CodeExecution(BaseModel):
 
 
 def validate_code(code: str):
-    """简单的安全过滤，检查不安全的关键字"""
     dangerous_keywords = [
         "import os",
         "import sys",
@@ -21,7 +20,7 @@ def validate_code(code: str):
         "exec(",
     ]
     if any(keyword in code for keyword in dangerous_keywords):
-        raise ValueError("Code contains potentially dangerous operations.")
+        raise ValueError("补药橄榄我的环境")
 
 
 @router.post("/execute")
