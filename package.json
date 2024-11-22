@@ -26,5 +26,8 @@
     "*.{css,scss,md}": [
       "npx prettier --write"
     ]
+  },
+  "dependencies": {
+    "@mui/icons-material": "^6.1.8"
   }
 }

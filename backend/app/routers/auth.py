@@ -1,21 +1,20 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from passlib.context import CryptContext
-from pydantic import BaseModel, EmailStr
-from datetime import timedelta
+from pydantic import BaseModel, EmailStr, Field
+from typing import Optional
 from jose import JWTError, jwt
-from fastapi.security import OAuth2PasswordBearer
+from datetime import timedelta
 from ..db import prisma
 from ..core.security import create_access_token
 from ..core.config import settings
-from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
+from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
-# Define models for user registration, login, and profile update
+# 用户注册模型
 class UserCreate(BaseModel):
     username: str
     password: str
@@ -23,32 +22,21 @@ class UserCreate(BaseModel):
     fullName: str
 
 
+# 用户登录模型
 class UserLogin(BaseModel):
     username: str
     password: str
 
 
-class UserUpdate(BaseModel):
-    fullName: str
-    email: EmailStr
-
-
-from pydantic import BaseModel, EmailStr
-
-
-class UserUpdate(BaseModel):
-    fullName: str
-    email: EmailStr
-
-
+# 用户更新资料模型
 class UserUpdate(BaseModel):
     fullName: Optional[str] = None
     email: Optional[EmailStr] = None
-    current_password: Optional[str] = Field(None, min_length=8)
+    current_password: Optional[str] = Field(None)
     new_password: Optional[str] = Field(None, min_length=8)
 
 
-# Helper function to get the current user from the token
+# 获取当前用户的帮助函数
 async def get_current_user(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(
@@ -57,36 +45,36 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         username: str = payload.get("sub")
         if username is None:
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+                status_code=status.HTTP_401_UNAUTHORIZED, detail="无效的令牌"
             )
         user = await prisma.user.find_unique(where={"username": username})
         if user is None:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="用户未找到"
             )
         return user
     except JWTError:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="无效的令牌"
         )
 
 
-# Register new user
+# 注册新用户
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 async def register(user: UserCreate):
     hashed_password = pwd_context.hash(user.password)
 
-    # Check if the username or email already exists
+    # 检查用户名或邮箱是否已经存在
     existing_user = await prisma.user.find_first(
         where={"OR": [{"username": user.username}, {"email": user.email}]}
     )
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username or email already registered",
+            detail="用户名或邮箱已被注册",
         )
 
-    # Create a new user
+    # 创建新用户
     new_user = await prisma.user.create(
         data={
             "username": user.username,
@@ -95,17 +83,17 @@ async def register(user: UserCreate):
             "fullName": user.fullName,
         }
     )
-    return {"msg": "User created successfully", "user_id": new_user.id}
+    return {"msg": "用户注册成功", "user_id": new_user.id}
 
 
-# User login
+# 用户登录
 @router.post("/login")
 async def login(user: UserLogin):
     db_user = await prisma.user.find_unique(where={"username": user.username})
     if not db_user or not pwd_context.verify(user.password, db_user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
+            detail="用户名或密码错误",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -115,9 +103,7 @@ async def login(user: UserLogin):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-# Update user profile
-# Get current user profile
-# Get current user profile
+# 获取当前用户资料
 @router.get("/me", status_code=status.HTTP_200_OK)
 async def get_profile(current_user=Depends(get_current_user)):
     return {
@@ -127,105 +113,41 @@ async def get_profile(current_user=Depends(get_current_user)):
     }
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
-        )
-        username: str = payload.get("sub")
-        if username is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-            )
-        user = await prisma.user.find_unique(where={"username": username})
-        if user is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-            )
-        return user
-    except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-        )
-
-
-# Update user profile
-@router.put("/me", status_code=status.HTTP_200_OK)
-async def update_profile(
-    user_update: UserUpdate, current_user=Depends(get_current_user)
-):
-    # Update the user in the database
-    updated_user = await prisma.user.update(
-        where={"id": current_user.id},
-        data={
-            "fullName": user_update.fullName,
-            "email": user_update.email,
-        },
-    )
-    return {"msg": "Profile updated successfully", "user": updated_user}
-
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-# Helper function to get the current user
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
-        )
-        username: str = payload.get("sub")
-        if username is None:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-            )
-        user = await prisma.user.find_unique(where={"username": username})
-        if user is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-            )
-        return user
-    except JWTError:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-        )
-
-
-# Update user profile and/or password
+# 更新用户资料或密码
 @router.put("/me", status_code=status.HTTP_200_OK)
 async def update_profile(
     user_update: UserUpdate, current_user=Depends(get_current_user)
 ):
     update_data = {}
 
-    # Update full name and email if provided
+    # 如果提供了 fullName 和 email，则更新
     if user_update.fullName:
         update_data["fullName"] = user_update.fullName
     if user_update.email:
         update_data["email"] = user_update.email
 
-    # Update password if current_password and new_password are provided
+    # 如果提供了 current_password 和 new_password，则更新密码
     if user_update.current_password and user_update.new_password:
-        # Verify the current password
+        # 验证当前密码
         if not pwd_context.verify(
             user_update.current_password, current_user.hashed_password
         ):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Current password is incorrect",
+                detail="当前密码错误",
             )
-        # Hash the new password and add it to the update data
+        # 哈希新密码并添加到更新数据中
         update_data["hashed_password"] = pwd_context.hash(user_update.new_password)
 
-    # Ensure there is data to update
+    # 检查是否有需要更新的数据
     if not update_data:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No data provided for update",
+            detail="没有提供任何需要更新的数据",
         )
 
-    # Update the user in the database
+    # 更新用户信息
     updated_user = await prisma.user.update(
         where={"id": current_user.id}, data=update_data
     )
-    return {"msg": "Profile updated successfully", "user": updated_user}
+    return {"msg": "用户资料更新成功", "user": updated_user}
