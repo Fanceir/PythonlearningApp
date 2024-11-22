@@ -15,6 +15,7 @@ function Register() {
       await registerUser({ username, password, email, fullName });
       alert('注册成功');
       navigator('/login');
+      // Redirect to login page
     } catch (error) {
       console.error('注册失败', error);
     }

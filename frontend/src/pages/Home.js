@@ -1,17 +1,12 @@
-// pages/Home.js
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { executeCode } from '../services/api';
-import { Button, Typography, Box } from '@mui/material';
-import TopBarHome from '../components/TopBarHome';
+import React, { useState } from 'react';
+import { Button, Typography, Box, Container } from '@mui/material';
 import Editor from '@monaco-editor/react';
+import TopBar from '../components/TopBar'; // 提取的导航栏组件
+import { executeCode } from '../services/api';
 
 function Home() {
   const [code, setCode] = useState('print("Hello, Python!")');
   const [output, setOutput] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const navigate = useNavigate();
 
   const handleExecute = async () => {
     try {
@@ -22,34 +17,31 @@ function Home() {
     }
   };
 
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-
-  const handleRegisterClick = () => {
-    navigate('/register');
-  };
-
-  const handleLogoutClick = () => {
-    console.log('Logout button clicked');
-    setIsLoggedIn(false);
-  };
-
   return (
-    <Box sx={{ padding: 4 }}>
-      <TopBarHome
-        isLoggedIn={isLoggedIn}
-        onLoginClick={handleLoginClick}
-        onRegisterClick={handleRegisterClick}
-        onLogoutClick={handleLogoutClick}
-      />
+    <Box sx={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
+      {/* 顶部导航 */}
+      <TopBar />
 
-      <Box sx={{ mt: 4 }}>
-        <Typography variant="h3" gutterBottom align="center">
+      {/* 内容部分 */}
+      <Container sx={{ mt: 6 }}>
+        <Typography
+          variant="h3"
+          gutterBottom
+          align="center"
+          sx={{ color: 'primary.main' }}
+        >
           欢迎来到 Python 学习平台
         </Typography>
+        <Typography
+          variant="body1"
+          align="center"
+          sx={{ color: 'text.secondary', mb: 4 }}
+        >
+          在这里运行 Python 代码，探索学习的乐趣。
+        </Typography>
 
-        <Box sx={{ border: '1px solid #ddd', borderRadius: '5px', mt: 2 }}>
+        {/* 编辑器和运行结果 */}
+        <Box sx={{ border: '1px solid #ddd', borderRadius: '5px', mb: 4 }}>
           <Editor
             height="300px"
             defaultLanguage="python"
@@ -71,22 +63,24 @@ function Home() {
           sx={{ mt: 2 }}
           fullWidth
         >
-          Run Code
+          运行代码
         </Button>
 
-        <Typography variant="h6" sx={{ mt: 3 }}>
-          Output:
+        <Typography variant="h6" sx={{ mt: 3, color: 'secondary.main' }}>
+          输出:
         </Typography>
         <pre
           style={{
             backgroundColor: '#f0f0f0',
             padding: '10px',
             borderRadius: '5px',
+            color: '#333',
+            overflowX: 'auto',
           }}
         >
-          {output}
+          {output || '尚无输出...'}
         </pre>
-      </Box>
+      </Container>
     </Box>
   );
 }
