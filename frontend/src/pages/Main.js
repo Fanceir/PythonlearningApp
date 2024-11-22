@@ -1,17 +1,25 @@
-import React, { useState } from 'react';
-import { Box, Paper, useTheme } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Paper } from '@mui/material';
 import TopBar from '../components/TopBar';
 import Sidebar from '../components/Sidebar';
 import ContentArea from '../components/ContentArea';
 
 function Main() {
-  const [selectedModule, setSelectedModule] = useState({
+  const defaultModule = {
     name: 'Python Basics',
     path: '/docs/python_basics.md',
+  };
+
+  // 初始化时从 localStorage 加载状态
+  const [selectedModule, setSelectedModule] = useState(() => {
+    const savedModule = localStorage.getItem('selectedModule');
+    return savedModule ? JSON.parse(savedModule) : defaultModule;
   });
 
   const handleSelectModule = (module) => {
     setSelectedModule(module);
+    // 保存到 localStorage
+    localStorage.setItem('selectedModule', JSON.stringify(module));
   };
 
   return (
@@ -27,11 +35,12 @@ function Main() {
         sx={{
           display: 'flex',
           flex: 1,
-          gap: 2, // Add spacing between sidebar and content
-          p: 2, // Add padding around the main content
-          overflow: 'hidden', // Prevent content from creating scrollbars
+          gap: 2,
+          p: 2,
+          overflow: 'hidden',
         }}
       >
+        {/* Sidebar */}
         <Paper
           elevation={2}
           sx={{
@@ -43,12 +52,14 @@ function Main() {
         >
           <Sidebar onSelectModule={handleSelectModule} />
         </Paper>
+
+        {/* Content Area */}
         <Paper
           elevation={2}
           sx={{
             flex: 1,
             borderRadius: 2,
-            overflow: 'hidden',
+            overflow: 'auto',
           }}
         >
           <ContentArea selectedModule={selectedModule} />
