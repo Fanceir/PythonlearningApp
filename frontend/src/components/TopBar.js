@@ -1,34 +1,70 @@
-// components/TopBar.js
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  CircularProgress,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { fetchUserProfile } from '../services/api'; // 导入API
 
-function TopBar({ isLoggedIn = false, userName = '' }) {
+function TopBar() {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null); // 用于存储用户信息
+  const [loading, setLoading] = useState(true); // 用于显示加载状态
+
+  useEffect(() => {
+    // 获取用户信息
+    const getUserInfo = async () => {
+      try {
+        const response = await fetchUserProfile(); // 调用API
+        setUser(response.data); // 设置用户信息
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error);
+      } finally {
+        setLoading(false); // 完成加载
+      }
+    };
+
+    if (localStorage.getItem('token')) {
+      // 判断是否有登录状态
+      getUserInfo(); // 获取用户信息
+    } else {
+      setLoading(false); // 没有登录状态，直接停止加载
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/');
+    setUser(null); // 清空用户信息
+    navigate('/'); // 重定向到首页
   };
 
   const goToProfile = () => {
-    navigate('/profile');
+    navigate('/profile'); // 导航到个人资料页面
   };
 
   const goToHome = () => {
-    navigate('/');
+    navigate('/'); // 导航到首页
   };
 
   return (
     <AppBar
       position="static"
       sx={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'inherit',
         borderBottom: '1px solid #ddd',
         boxShadow: 'none',
       }}
     >
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+        }}
+      >
         {/* 左侧：标题 */}
         <Typography
           variant="h6"
@@ -44,7 +80,10 @@ function TopBar({ isLoggedIn = false, userName = '' }) {
 
         {/* 右侧：按钮 */}
         <Box sx={{ display: 'flex', gap: 2 }}>
-          {isLoggedIn ? (
+          {loading ? (
+            // 如果加载中，显示加载指示器
+            <CircularProgress size={24} sx={{ color: '#333' }} />
+          ) : user ? (
             <>
               <Typography
                 variant="body1"
@@ -54,7 +93,7 @@ function TopBar({ isLoggedIn = false, userName = '' }) {
                   alignItems: 'center',
                 }}
               >
-                欢迎, {userName || '用户'}
+                欢迎, {user.fullName || '用户'} {/* 显示用户名 */}
               </Typography>
               <Button
                 color="inherit"

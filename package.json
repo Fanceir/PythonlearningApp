@@ -28,6 +28,7 @@
     ]
   },
   "dependencies": {
-    "@mui/icons-material": "^6.1.8"
+    "@mui/icons-material": "^6.1.8",
+    "react-split": "^2.0.14"
   }
 }

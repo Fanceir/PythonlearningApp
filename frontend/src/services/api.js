@@ -38,11 +38,24 @@ export const loginUser = ({ username, password }) =>
   api.post('/auth/login', { username, password });
 
 // Profile API
-export const fetchUserProfile = () => api.get('/auth/me'); // Updated endpoint to /auth/me
-export const updateUserProfile = (profileData) =>
-  api.put('/auth/me', profileData); // Updated endpoint to /auth/me
 
 // Code Execution API
 export const executeCode = (codeData) => api.post('/code/execute', codeData);
 
 export default api;
+export const fetchUserProfile = () => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    api.defaults.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return api.get('/auth/me');
+};
+
+// 更新用户信息
+export const updateUserProfile = (profileData) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    api.defaults.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return api.put('/auth/me', profileData);
+};

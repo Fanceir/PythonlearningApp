@@ -1,4 +1,3 @@
-# backend/app/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import auth, code  # 确保导入你的路由模块
@@ -17,7 +16,7 @@ app.add_middleware(
 
 # 添加路由
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
-app.include_router(code.router, prefix="/code", tags=["code"])
+app.include_router(code.router, prefix="/code", tags=["code"])  # 导入并包含 code 路由
 
 
 # 启动和关闭数据库连接的事件

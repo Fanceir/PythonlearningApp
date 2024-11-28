@@ -1,55 +1,150 @@
-/* components/MarkdownContent.css */
-.markdown-content {
-  font-family: 'Arial', sans-serif;
-  line-height: 1.6;
+/* Markdown 基本样式 */
+.markdown-container {
+  font-family: 'Roboto', sans-serif; /* 更现代的字体 */
+  line-height: 1.75;
+  color: #333;
+  padding: 20px;
+  background-color: #f4f6f8; /* 浅灰色背景 */
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 1200px;
+  margin: 20px auto;
+}
+
+/* 标题样式 */
+.markdown-container h1,
+.markdown-container h2,
+.markdown-container h3,
+.markdown-container h4,
+.markdown-container h5,
+.markdown-container h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.8em;
+  font-weight: bold;
+  letter-spacing: -0.5px;
   color: #333;
 }
 
-.markdown-content h1 {
-  font-size: 2rem;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 0.3rem;
-  margin-bottom: 1rem;
+.markdown-container h1 {
+  font-size: 2.5em;
+  color: #007acc; /* 主色调 */
+  border-bottom: 3px solid #007acc;
+  padding-bottom: 10px;
 }
 
-.markdown-content h2 {
-  font-size: 1.5rem;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 0.2rem;
-  margin-bottom: 0.8rem;
+.markdown-container h2 {
+  font-size: 2em;
+  color: #555;
 }
 
-.markdown-content h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.6rem;
+.markdown-container h3 {
+  font-size: 1.8em;
+  color: #666;
 }
 
-.markdown-content p {
-  margin-bottom: 1rem;
+/* 普通文本 */
+.markdown-container p {
+  font-size: 1.1em;
+  margin-bottom: 1.5em;
+  color: #555;
 }
 
-.markdown-content ul,
-.markdown-content ol {
-  padding-left: 1.5rem;
-  margin-bottom: 1rem;
+/* 链接 */
+.markdown-container a {
+  color: #007acc;
+  text-decoration: none;
+  font-weight: 500;
 }
 
-.markdown-content li {
-  margin-bottom: 0.5rem;
+.markdown-container a:hover {
+  text-decoration: underline;
 }
 
-.markdown-content code {
-  background-color: #f4f4f4;
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
+/* 列表 */
+.markdown-container ul,
+.markdown-container ol {
+  margin-left: 2em;
+  margin-bottom: 1.5em;
 }
 
-.markdown-content pre {
+.markdown-container li {
+  margin-bottom: 0.8em;
+}
+
+.markdown-container li:before {
+  content: '•'; /* 自定义列表项 */
+  color: #007acc;
+  font-size: 1.2em;
+  margin-right: 0.8em;
+}
+
+/* 引用 */
+.markdown-container blockquote {
+  background-color: #f9f9f9;
+  border-left: 5px solid #007acc;
+  color: #555;
+  padding: 15px;
+  font-style: italic;
+  margin: 20px 0;
+  border-radius: 5px;
+}
+
+/* 代码块 */
+.markdown-container pre {
   background-color: #2d2d2d;
-  padding: 1rem;
-  border-radius: 8px;
   color: #f8f8f2;
+  padding: 20px;
+  border-radius: 5px;
   overflow-x: auto;
-  margin-bottom: 1rem;
+  font-size: 0.9em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.markdown-container code {
+  background-color: #f1f1f1;
+  padding: 5px 8px;
+  border-radius: 3px;
+  color: #d14;
+}
+
+/* 语法高亮 */
+.markdown-container .react-syntax-highlighter {
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 0.9em;
+}
+
+/* 表格样式 */
+.markdown-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2em;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.markdown-container table th,
+.markdown-container table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.markdown-container table th {
+  background-color: #007acc;
+  color: white;
+  font-weight: 600;
+}
+
+.markdown-container table td {
+  background-color: #f9f9f9;
+}
+
+/* 图片样式 */
+.markdown-container img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 20px 0;
 }
