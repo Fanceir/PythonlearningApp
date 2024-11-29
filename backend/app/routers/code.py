@@ -50,15 +50,15 @@ async def execute_code(code_execution: CodeExecution):
                 "docker",
                 "run",
                 "--rm",  # 容器运行完后自动删除
-                "--memory=128m",  # 限制内存
-                "--cpus=1",  # 限制 CPU 核心数
+                "--memory=256m",  # 限制内存
+                "--cpus=2",  # 限制 CPU 核心数
                 "python:3.10",  # 使用 Python 3.10 镜像
                 "python3",  # 使用 Python 3 执行
                 "-c",  # 运行代码
                 code_execution.code,  # 用户传入的代码
             ],
             stderr=subprocess.STDOUT,  # 捕获标准错误输出
-            timeout=5,  # 超时时间为 5 秒
+            timeout=10,  # 超时时间为 5 秒
             text=True,  # 输出为文本格式
         )
 

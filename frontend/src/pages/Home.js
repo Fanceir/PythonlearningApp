@@ -11,7 +11,7 @@ import {
   Paper,
 } from '@mui/material';
 import Editor from '@monaco-editor/react';
-import TopBar from '../components/TopBar'; // 导入顶部导航
+import TopBarHome from '../components/TopBarHome'; // 导入顶部导航
 import { executeCode } from '../services/api';
 
 function Home() {
@@ -30,7 +30,7 @@ function Home() {
   return (
     <Box sx={{ backgroundColor: '#fafafa', minHeight: '100vh' }}>
       {/* 顶部导航栏 */}
-      <TopBar />
+      <TopBarHome />
 
       {/* Hero 区域 */}
       <Box
