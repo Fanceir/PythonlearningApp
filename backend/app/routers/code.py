@@ -35,12 +35,30 @@ def validate_code(code: str):
         raise ValueError("Detected dangerous operation in the code.")
 
 
+# 拉取镜像（如果本地没有）
+def pull_docker_image():
+    try:
+        subprocess.run(
+            ["docker", "pull", "python:3.10"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        logger.info("Python 3.10 image pulled successfully.")
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Error pulling Python 3.10 image: {e}")
+        raise HTTPException(status_code=500, detail="Failed to pull Docker image.")
+
+
 # 运行代码的主路由
 @router.post("/execute")
 async def execute_code(code_execution: CodeExecution):
     logger.info(f"Received code: {code_execution.code}")  # 输出接收到的代码
 
     try:
+        # 拉取镜像（确保镜像存在）
+        pull_docker_image()
+
         # 先验证代码的安全性
         validate_code(code_execution.code)
 

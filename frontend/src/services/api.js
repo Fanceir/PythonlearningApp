@@ -59,3 +59,8 @@ export const updateUserProfile = (profileData) => {
   }
   return api.put('/auth/me', profileData);
 };
+
+export const fetchQuestionData = async () => {
+  const response = await axios.get('/docs/questions.json'); // 从 public/docs/questions.json 获取 JSON 数据
+  return response; // 返回的是一个包含题目数组的对象
+};

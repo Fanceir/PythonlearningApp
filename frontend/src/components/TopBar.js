@@ -50,6 +50,10 @@ function TopBar() {
     navigate('/'); // 导航到首页
   };
 
+  const goToPractice = () => {
+    navigate('/practice'); // 导航到在线做题页面
+  };
+
   return (
     <AppBar
       position="static"
@@ -116,6 +120,18 @@ function TopBar() {
                 onClick={handleLogout}
               >
                 登出
+              </Button>
+              {/* 新增在线做题按钮 */}
+              <Button
+                color="inherit"
+                sx={{
+                  fontSize: '1rem',
+                  color: '#333',
+                  textTransform: 'none',
+                }}
+                onClick={goToPractice}
+              >
+                在线做题
               </Button>
             </>
           ) : (
