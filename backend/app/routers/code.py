@@ -44,21 +44,20 @@ async def execute_code(code_execution: CodeExecution):
         # 先验证代码的安全性
         validate_code(code_execution.code)
 
-        # 这里在 Docker 中执行代码，并限制资源（内存、CPU）和超时时间
+        # 使用本地主机上的 Docker 环境执行代码
         result = subprocess.check_output(
             [
                 "docker",
                 "run",
-                "--rm",  # 容器运行完后自动删除
                 "--memory=256m",  # 限制内存
                 "--cpus=2",  # 限制 CPU 核心数
                 "python:3.10",  # 使用 Python 3.10 镜像
                 "python3",  # 使用 Python 3 执行
-                "-c",  # 运行代码
-                code_execution.code,  # 用户传入的代码
+                "-c",  # 执行传入的代码
+                f"{code_execution.code}",  # 直接传递代码内容
             ],
             stderr=subprocess.STDOUT,  # 捕获标准错误输出
-            timeout=10,  # 超时时间为 5 秒
+            timeout=10,  # 超时时间为 10 秒
             text=True,  # 输出为文本格式
         )
 

@@ -8,8 +8,8 @@ import { Rnd } from 'react-rnd'; // 引入 react-rnd
 
 function Main() {
   const defaultModule = {
-    name: 'Python Basics',
-    path: '/docs/python_basics.md',
+    name: 'introduction',
+    path: '/docs/introduction',
   };
 
   // 从 localStorage 获取选中的模块
@@ -73,7 +73,6 @@ function Main() {
           <ContentArea selectedModule={selectedModule} />
         </Paper>
 
-        {/* CodeRunner：右侧代码运行区 */}
         {!isMobile && (
           <Rnd
             size={{ width: codeRunnerWidth, height: 'calc(100vh - 64px)' }} // 控制 CodeRunner 的初始宽度和高度

@@ -7,7 +7,6 @@ import {
   Grid,
   Card,
   CardContent,
-  CardMedia,
   Paper,
 } from '@mui/material';
 import Editor from '@monaco-editor/react';
@@ -40,13 +39,14 @@ function Home() {
           backgroundColor: '#1976d2', // 主要蓝色背景
           color: '#fff',
           borderBottom: '5px solid #1565c0', // 增加底部边框
+          borderRadius: '0 0 20px 20px',
         }}
       >
         <Typography variant="h2" sx={{ fontWeight: 'bold' }} gutterBottom>
           欢迎来到 Python 学习平台
         </Typography>
         <Typography variant="h5" sx={{ mb: 4 }}>
-          在这里你可以运行、学习并分享 Python 代码，开始你的编程之旅！
+          在这里你可以运行、学习 Python 代码，开始你的编程之旅！
         </Typography>
         <Button
           variant="contained"
@@ -58,186 +58,197 @@ function Home() {
             '&:hover': {
               backgroundColor: '#1e88e5', // 更深的蓝色按钮悬浮状态
             },
+            borderRadius: '50px',
           }}
         >
           立即开始
         </Button>
       </Box>
 
-      {/* 内容块（Features 或 Highlights） */}
+      {/* 主要特性区域 */}
       <Container id="features" sx={{ py: 6 }}>
         <Typography variant="h4" gutterBottom align="center" sx={{ mb: 4 }}>
-          主要特性
+          主要功能
         </Typography>
         <Grid container spacing={4} justifyContent="center">
+          {/* 第一个卡片 - 快速运行代码 */}
           <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ maxWidth: 345, boxShadow: 3, borderRadius: 2 }}>
-              <CardMedia
-                component="img"
-                height="140"
-                image="https://via.placeholder.com/150"
-                alt="Feature 1"
-              />
+            <Card sx={{ maxWidth: 345, boxShadow: 3, borderRadius: 3 }}>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
                   快速运行代码
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  在此平台，你可以快速写并执行 Python 代码，无需复杂的环境配置。
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  立即编写并运行 Python 代码，无需任何配置，马上看到执行结果。
+                </Typography>
+                {/* 渐变按钮 */}
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: '100%',
+                    height: 100,
+                    borderRadius: 3,
+                    background: 'linear-gradient(45deg, #1e3c72, #2a5298)', // 蓝色渐变背景
+                    color: 'white',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      background: 'linear-gradient(45deg, #2a5298, #1e3c72)', // Hover 时改变渐变方向
+                    },
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  运行代码
+                </Button>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 2 }}
+                >
+                  示例：`print("Hello, Python!")` 在右侧编辑框中修改代码并运行
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
+
+          {/* 第二个卡片 - 学习使用语法 */}
           <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ maxWidth: 345, boxShadow: 3, borderRadius: 2 }}>
-              <CardMedia
-                component="img"
-                height="140"
-                image="https://via.placeholder.com/150"
-                alt="Feature 2"
-              />
+            <Card sx={{ maxWidth: 345, boxShadow: 3, borderRadius: 3 }}>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  交互式学习
+                  学习 Python 语法
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  通过交互式的代码示例，让你在实践中学习 Python。
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  学习 Python 基础语法，掌握编程基础，快速上手。
+                </Typography>
+                {/* 渐变按钮 */}
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: '100%',
+                    height: 100,
+                    borderRadius: 3,
+                    background: 'linear-gradient(45deg, #1e3c72, #2a5298)', // 蓝色渐变背景
+                    color: 'white',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      background: 'linear-gradient(45deg, #2a5298, #1e3c72)', // Hover 时改变渐变方向
+                    },
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  学习语法
+                </Button>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 2 }}
+                >
+                  例如：如何使用变量、控制结构（if、for、while）、函数等。
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
+
+          {/* 第三个卡片 - 互动学习平台 */}
           <Grid item xs={12} sm={6} md={4}>
-            <Card sx={{ maxWidth: 345, boxShadow: 3, borderRadius: 2 }}>
-              <CardMedia
-                component="img"
-                height="140"
-                image="https://via.placeholder.com/150"
-                alt="Feature 3"
-              />
+            <Card sx={{ maxWidth: 345, boxShadow: 3, borderRadius: 3 }}>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
-                  丰富的文档
+                  互动学习平台
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  提供完整的文档和教程，帮助你从入门到精通。
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  通过参与讨论、协作编程，提升你的编程技能。
+                </Typography>
+                {/* 渐变按钮 */}
+                <Button
+                  variant="contained"
+                  sx={{
+                    width: '100%',
+                    height: 100,
+                    borderRadius: 3,
+                    background: 'linear-gradient(45deg, #1e3c72, #2a5298)', // 蓝色渐变背景
+                    color: 'white',
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      background: 'linear-gradient(45deg, #2a5298, #1e3c72)', // Hover 时改变渐变方向
+                    },
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  加入互动
+                </Button>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mt: 2 }}
+                >
+                  在这里，你可以与其他学习者一起讨论编程问题，分享代码。
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
-      </Container>
 
-      {/* 快速链接和导航 */}
-      <Container sx={{ py: 6, backgroundColor: '#e3f2fd' }}>
-        <Typography variant="h5" gutterBottom align="center">
-          快速导航
-        </Typography>
-        <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={12} sm={4}>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              href="/docs"
-              sx={{
-                py: 2,
-                backgroundColor: '#0288d1', // 更深的蓝色
-                '&:hover': {
-                  backgroundColor: '#0277bd', // 更深的蓝色悬浮
-                },
+        {/* 代码编辑器和输出 */}
+        <Container sx={{ py: 6 }}>
+          <Typography variant="h5" gutterBottom align="center">
+            代码编辑器
+          </Typography>
+          <Box sx={{ border: '1px solid #ddd', borderRadius: 5, mb: 4 }}>
+            <Editor
+              height="300px"
+              defaultLanguage="python"
+              value={code}
+              onChange={(value) => setCode(value || '')}
+              theme="vs-dark"
+              options={{
+                fontSize: 14,
+                minimap: { enabled: false },
+                lineNumbers: 'on',
               }}
-            >
-              查看文档
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              href="/start"
-              sx={{
-                py: 2,
-                backgroundColor: '#039be5', // 明亮的蓝色
-                '&:hover': {
-                  backgroundColor: '#0288d1', // 深蓝色悬浮
-                },
-              }}
-            >
-              开始学习
-            </Button>
-          </Grid>
-          <Grid item xs={12} sm={4}>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              href="/download"
-              sx={{
-                py: 2,
-                backgroundColor: '#0288d1', // 深蓝色
-                '&:hover': {
-                  backgroundColor: '#0277bd', // 更深的蓝色悬浮
-                },
-              }}
-            >
-              下载工具
-            </Button>
-          </Grid>
-        </Grid>
-      </Container>
+            />
+          </Box>
 
-      {/* 代码编辑器和输出 */}
-      <Container sx={{ py: 6 }}>
-        <Typography variant="h5" gutterBottom align="center">
-          代码编辑器
-        </Typography>
-        <Box sx={{ border: '1px solid #ddd', borderRadius: '5px', mb: 4 }}>
-          <Editor
-            height="300px"
-            defaultLanguage="python"
-            value={code}
-            onChange={(value) => setCode(value || '')}
-            theme="vs-dark"
-            options={{
-              fontSize: 14,
-              minimap: { enabled: false },
-              lineNumbers: 'on',
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleExecute}
+            sx={{
+              mt: 2,
+              backgroundColor: '#0288d1', // 深蓝色
+              '&:hover': {
+                backgroundColor: '#0277bd', // 深蓝色悬浮
+              },
+              borderRadius: '50px',
+              fontSize: 18,
+              fontWeight: 'bold',
+              transition: 'all 0.3s ease',
             }}
-          />
-        </Box>
+            fullWidth
+          >
+            运行代码
+          </Button>
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleExecute}
-          sx={{
-            mt: 2,
-            backgroundColor: '#0288d1', // 深蓝色
-            '&:hover': {
-              backgroundColor: '#0277bd', // 深蓝色悬浮
-            },
-          }}
-          fullWidth
-        >
-          运行代码
-        </Button>
-
-        <Typography variant="h6" sx={{ mt: 3, color: 'secondary.main' }}>
-          输出:
-        </Typography>
-        <Paper
-          sx={{
-            backgroundColor: '#f0f0f0',
-            padding: '10px',
-            borderRadius: '5px',
-            color: '#333',
-            overflowX: 'auto',
-            boxShadow: 1,
-          }}
-        >
-          {output || '尚无输出...'}
-        </Paper>
+          <Typography variant="h6" sx={{ mt: 3, color: 'secondary.main' }}>
+            输出:
+          </Typography>
+          <Paper
+            sx={{
+              backgroundColor: '#f0f0f0',
+              padding: '20px',
+              borderRadius: 5,
+              color: '#333',
+              overflowX: 'auto',
+              boxShadow: 2,
+              border: '1px solid #ddd',
+            }}
+          >
+            {output || '尚无输出...'}
+          </Paper>
+        </Container>
       </Container>
     </Box>
   );

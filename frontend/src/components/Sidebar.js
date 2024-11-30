@@ -4,7 +4,7 @@ import { List, ListItem, ListItemText, Divider, Box } from '@mui/material';
 
 function Sidebar({ onSelectModule }) {
   const modules = [
-    { name: 'Python Basics', path: '/docs/python_basics.md' },
+    { name: 'Introduction', path: '/docs/introduction.md' },
     { name: 'Advanced Python', path: '/docs/advanced_python.md' },
     { name: 'Exercises', path: '/docs/exercises.md' },
   ];
